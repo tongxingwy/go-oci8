@@ -5,7 +5,17 @@ package oci8
 #include <stdlib.h>
 #include <string.h>
 
-#cgo pkg-config: oci8
+#cgo windows CFLAGS: -I./external/include
+#cgo windows LDFLAGS: -L./external/lib/windows/msvc -loci
+
+#cgo darwin CFLAGS: -I./external/include
+#cgo darwin LDFLAGS: -L./external/lib/darwin -locci -lclntsh
+
+#cgo linux CFLAGS: -I./external/include
+#cgo linux LDFLAGS: -L./external/lib/linux -locci -lclntsh
+
+//windows linux darwin
+//#cgo pkg-config: oci8
 
 typedef struct {
   int num;

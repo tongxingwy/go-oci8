@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	_ "github.com/mattn/go-oci8"
+	_ "github.com/tongxingwy/go-oci8"
 )
 
 func main() {
