@@ -2,15 +2,17 @@ package main
 
 import (
 	"database/sql"
+	//"flag"
 	"fmt"
+	"log"
 	"os"
-	"strings"
+	//"strings"
 
 	_ "github.com/tongxingwy/go-oci8"
 )
 
 func main() {
-	nlsLang := os.Getenv("NLS_LANG")
+	/*nlsLang := os.Getenv("NLS_LANG")
 	if !strings.HasSuffix(nlsLang, "UTF8") {
 		i := strings.LastIndex(nlsLang, ".")
 		if i < 0 {
@@ -20,9 +22,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "NLS_LANG error: should be %s, not %s!\n",
 				nlsLang, os.Getenv("NLS_LANG"))
 		}
-	}
-
-	db, err := sql.Open("oci8", getDSN())
+	}*/
+	os.Setenv("NLS_LANG", "SIMPLIFIED CHINESE_CHINA.ZHS16GBK")
+	args := os.Args
+	log.Println("args: ",args)
+	db, err := sql.Open("oci8", args[1])
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -34,10 +38,10 @@ func main() {
 		return
 	}
 
-	if err = testI18n(db); err != nil {
+	/*if err = testI18n(db); err != nil {
 		fmt.Println(err)
 		return
-	}
+	}*/
 }
 
 func getDSN() string {
@@ -58,23 +62,23 @@ or as the first argument! (The format is user/name@host:port/sid)`)
 }
 
 func testSelect(db *sql.DB) error {
-	rows, err := db.Query("select 3.14, 'foo' from dual")
+	rows, err := db.Query("select 3.14, 'hello' from dual")
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
-
+	log.Println("get result........",rows)
 	for rows.Next() {
 		var f1 float64
 		var f2 string
 		rows.Scan(&f1, &f2)
-		println(f1, f2) // 3.14 foo
+		log.Println(f1, f2) // 3.14 foo
 	}
-	_, err = db.Exec("create table foo(bar varchar2(256))")
+	/*_, err = db.Exec("create table foo(bar varchar2(256))")
 	_, err = db.Exec("drop table foo")
 	if err != nil {
 		return err
-	}
+	}*/
 
 	return nil
 }
